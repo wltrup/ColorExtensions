@@ -5,6 +5,12 @@ import PackageDescription
 
 let package = Package(
     name: "ColorExtensions",
+    platforms: [
+        .macOS(.v10_14),
+        .iOS(.v10),
+        .watchOS(.v5),
+        .tvOS(.v10)
+    ],
     products: [
         .library(
             name: "ColorExtensions",
