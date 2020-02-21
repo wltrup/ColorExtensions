@@ -2,7 +2,7 @@
 
 ## What
 
-**ColorExtensions** is a Swift Package Manager package for iOS 10.0 and above, iPadOS 10.0 and above, and watchOS 5.0 and above providing a variety of useful extensions to UIColor. In fact, here's a complete list of all the functions and extra types that are made available by this package:
+**ColorExtensions** is a Swift Package Manager package for iOS 10.0 and above, iPadOS 10.0 and above, and watchOS 5.0 and above providing a variety of useful extensions to UIColor, with nearly 90% test coverage. In fact, here's a complete list of all the functions and extra types that are made available by this package:
 ```swift
 extension UIColor {
 
@@ -217,13 +217,13 @@ extension UIColor {
 
     /// Returns an approximate value for the luminance of an RGB color.
     ///
-    /// See [this entry](http://gamedev.stackexchange.com/questions/38536/given-a-rgb-color-x-how-to-find-the-most-contrasting-color-y) in gamedev.stackexchange
+    /// See http://gamedev.stackexchange.com/questions/38536/given-a-rgb-color-x-how-to-find-the-most-contrasting-color-y
     ///
     public static func quadraticLuma(red: CGFloat, green: CGFloat, blue: CGFloat) -> CGFloat
 
     /// Returns an approximate value for the luminance of an RGB color.
     ///
-    /// See [this entry](http://gamedev.stackexchange.com/questions/38536/given-a-rgb-color-x-how-to-find-the-most-contrasting-color-y) in gamedev.stackexchange
+    /// See http://gamedev.stackexchange.com/questions/38536/given-a-rgb-color-x-how-to-find-the-most-contrasting-color-y
     ///
     public func quadraticLuma() -> Result<CGFloat, ColorSpaceError>
 
@@ -231,7 +231,7 @@ extension UIColor {
 
     /// Returns a color that contrasts well with self.
     ///
-    /// See [this entry](http://gamedev.stackexchange.com/questions/38536/given-a-rgb-color-x-how-to-find-the-most-contrasting-color-y) in gamedev.stackexchange
+    /// See http://gamedev.stackexchange.com/questions/38536/given-a-rgb-color-x-how-to-find-the-most-contrasting-color-y
     ///
     /// - Parameters:
     ///
