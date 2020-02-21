@@ -7,10 +7,23 @@ public typealias ColorType = UIColor
 
 // MARK: -
 
+infix operator ~== : ComparisonPrecedence
+
 extension CGFloat {
 
     internal static func random01 <RNG: RandomNumberGenerator> (using rng: inout RNG) -> CGFloat {
         CGFloat.random(in: 0 ... 1, using: &rng)
+    }
+
+    internal static func random01() -> CGFloat {
+        var rng = SystemRandomNumberGenerator()
+        return CGFloat.random01(using: &rng)
+    }
+
+    /// Approximate equality (good enough for the purpose at hand)
+    internal static func ~== (lhs: Self, rhs: Self) -> Bool {
+        let m: CGFloat = 1_000_000_000_000
+        return Int(lhs * m) == Int(rhs * m)
     }
 
 }
@@ -58,11 +71,21 @@ extension ColorType {
     /// given its hexadecimal string representation (which **does** includes alpha).
     ///
     public convenience init?(hexStringRGBA: String) {
+        guard hexStringRGBA.count <= 9 else { return nil }
+        var hexStr = hexStringRGBA.uppercased()
+        if hexStr.count == 9 {
+            guard hexStr.first == "#" else { return nil }
+            hexStr = String(hexStr.dropFirst())
+        }
+        for c in hexStr {
+            if c != "A" && c != "B" && c != "C" && c != "D" && c != "E" && c != "F"
+            && c != "0" && c != "1" && c != "2" && c != "3" && c != "4" && c != "5"
+            && c != "6" && c != "7" && c != "8" && c != "9" { return nil }
+        }
         var hexInt32: UInt32 = 0
-        let scanner = Scanner(string: hexStringRGBA)
+        let scanner = Scanner(string: hexStr)
         scanner.charactersToBeSkipped = CharacterSet(charactersIn: "#")
-        let success = scanner.scanHexInt32(&hexInt32)
-        guard success else { return nil }
+        scanner.scanHexInt32(&hexInt32)
         self.init(hexValueRGBA: hexInt32)
     }
 
@@ -70,11 +93,21 @@ extension ColorType {
     /// given its hexadecimal string representation (which does **not** include alpha), if valid.
     ///
     public convenience init?(hexStringRGB: String, alpha: CGFloat = 1.0) {
+        guard hexStringRGB.count <= 7 else { return nil }
+        var hexStr = hexStringRGB.uppercased()
+        if hexStr.count == 7 {
+            guard hexStr.first == "#" else { return nil }
+            hexStr = String(hexStr.dropFirst())
+        }
+        for c in hexStr {
+            if c != "A" && c != "B" && c != "C" && c != "D" && c != "E" && c != "F"
+            && c != "0" && c != "1" && c != "2" && c != "3" && c != "4" && c != "5"
+            && c != "6" && c != "7" && c != "8" && c != "9" { return nil }
+        }
         var hexInt32: UInt32 = 0
-        let scanner = Scanner(string: hexStringRGB)
+        let scanner = Scanner(string: hexStr)
         scanner.charactersToBeSkipped = CharacterSet(charactersIn: "#")
-        let success = scanner.scanHexInt32(&hexInt32)
-        guard success else { return nil }
+        scanner.scanHexInt32(&hexInt32)
         self.init(hexValueRGB: hexInt32, alpha: alpha)
     }
 
@@ -208,11 +241,20 @@ extension ColorType {
         return ColorType(red: r, green: g, blue: b, alpha: a)
     }
 
-    public struct RGBAComponents {
+    public struct RGBAComponents: Equatable {
+
         public let red: CGFloat
         public let green: CGFloat
         public let blue: CGFloat
         public let alpha: CGFloat
+
+        public static func == (lhs: Self, rhs: Self) -> Bool {
+            lhs.red ~== rhs.red
+            && lhs.green ~== rhs.green
+            && lhs.blue ~== rhs.blue
+            && lhs.alpha ~== rhs.alpha
+        }
+
     }
 
     /// Returns the RGBA components of `self`, if `self` is represented internally in a **RGB**-compatible
@@ -279,11 +321,20 @@ extension ColorType {
         return ColorType(hue: h, saturation: s, brightness: b, alpha: a)
     }
 
-    public struct HSBAComponents {
+    public struct HSBAComponents: Equatable {
+
         public let hue: CGFloat
         public let saturation: CGFloat
         public let brightness: CGFloat
         public let alpha: CGFloat
+
+        public static func == (lhs: Self, rhs: Self) -> Bool {
+            lhs.hue ~== rhs.hue
+            && lhs.saturation ~== rhs.saturation
+            && lhs.brightness ~== rhs.brightness
+            && lhs.alpha ~== rhs.alpha
+        }
+
     }
 
     /// Returns the HSBA components of `self`, if `self` is represented internally in a **HSB**-compatible
@@ -345,9 +396,15 @@ extension ColorType {
         return ColorType(white: w, alpha: a)
     }
 
-    public struct WhiteAlphaComponents {
+    public struct WhiteAlphaComponents: Equatable {
+
         public let white: CGFloat
         public let alpha: CGFloat
+
+        public static func == (lhs: Self, rhs: Self) -> Bool {
+            lhs.white ~== rhs.white && lhs.alpha ~== rhs.alpha
+        }
+
     }
 
     /// Returns the white and alpha components of `self`, if `self` is represented internally in a
