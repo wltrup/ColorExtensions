@@ -32,7 +32,7 @@ extension UIColor {
     // MARK: - HEX
 
     /// Creates an instance of UIColor in the RGB color space, given its
-    /// hexadecimal representation (which does includes alpha).
+    /// hexadecimal representation (which does include alpha).
     ///
     public convenience init(hexValueRGBA: UInt32)
 
@@ -42,7 +42,7 @@ extension UIColor {
     public convenience init?(hexValueRGB: UInt32, alpha: CGFloat = 1.0)
 
     /// Creates an instance of UIColor in the RGB color space, given its
-    /// hexadecimal string representation (which does includes alpha).
+    /// hexadecimal string representation (which does include alpha).
     ///
     public convenience init?(hexStringRGBA: String)
 

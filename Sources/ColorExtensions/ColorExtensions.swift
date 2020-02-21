@@ -43,7 +43,7 @@ extension ColorType {
 extension ColorType {
 
     /// Creates an instance of `UIColor` in the **RGB** color space,
-    /// given its hexadecimal representation (which **does** includes alpha).
+    /// given its hexadecimal representation (which **does** include alpha).
     ///
     public convenience init(hexValueRGBA: UInt32) {
         let hexInt = Int(hexValueRGBA)
@@ -68,7 +68,7 @@ extension ColorType {
     }
 
     /// Creates an instance of `UIColor` in the **RGB** color space,
-    /// given its hexadecimal string representation (which **does** includes alpha).
+    /// given its hexadecimal string representation (which **does** include alpha).
     ///
     public convenience init?(hexStringRGBA: String) {
         guard hexStringRGBA.count <= 9 else { return nil }
