@@ -42,7 +42,7 @@ extension ColorType {
 
 extension ColorType {
 
-    /// Creates an instance of `UIColor` (on iOS) or of `NSColor` (on macOS) in the **RGB** color space,
+    /// Creates an instance of `UIColor` in the **RGB** color space,
     /// given its hexadecimal representation (which **does** includes alpha).
     ///
     public convenience init(hexValueRGBA: UInt32) {
@@ -54,7 +54,7 @@ extension ColorType {
         self.init(red: r, green: g, blue: b, alpha: a)
     }
 
-    /// Creates an instance of `UIColor` (on iOS) or of `NSColor` (on macOS) in the **RGB** color space,
+    /// Creates an instance of `UIColor` in the **RGB** color space,
     /// given its hexadecimal representation (which does **not** include alpha), if valid.
     ///
     public convenience init?(hexValueRGB: UInt32, alpha: CGFloat = 1.0) {
@@ -67,7 +67,7 @@ extension ColorType {
         self.init(red: r, green: g, blue: b, alpha: a)
     }
 
-    /// Creates an instance of `UIColor` (on iOS) or of `NSColor` (on macOS) in the **RGB** color space,
+    /// Creates an instance of `UIColor` in the **RGB** color space,
     /// given its hexadecimal string representation (which **does** includes alpha).
     ///
     public convenience init?(hexStringRGBA: String) {
@@ -89,7 +89,7 @@ extension ColorType {
         self.init(hexValueRGBA: hexInt32)
     }
 
-    /// Creates an instance of `UIColor` (on iOS) or of `NSColor` (on macOS) in the **RGB** color space,
+    /// Creates an instance of `UIColor` in the **RGB** color space,
     /// given its hexadecimal string representation (which does **not** include alpha), if valid.
     ///
     public convenience init?(hexStringRGB: String, alpha: CGFloat = 1.0) {
@@ -145,7 +145,7 @@ extension ColorType {
 
 extension ColorType {
 
-    /// Returns a new instance of `UIColor` (on iOS) or of `NSColor` (on macOS) in the **Display P3**
+    /// Returns a new instance of `UIColor` in the **Display P3**
     /// color space, with random values for its color coordinates (red, green, blue), but with its opacity
     /// (alpha) set to the argument passed in (whose default value is 1).
     ///
@@ -154,7 +154,7 @@ extension ColorType {
         return ColorType.randomDisplayP3(alpha: alpha, using: &rng)
     }
 
-    /// Returns a new instance of `UIColor` (on iOS) or of `NSColor` (on macOS) in the **Display P3**
+    /// Returns a new instance of `UIColor` in the **Display P3**
     /// color space, with random values for all of its color coordinates (red, green, blue, alpha).
     ///
     public static func randomDisplayP3A() -> ColorType {
@@ -162,7 +162,7 @@ extension ColorType {
         return ColorType.randomDisplayP3A(using: &rng)
     }
 
-    /// Returns a new instance of `UIColor` (on iOS) or of `NSColor` (on macOS) in the **Display P3**
+    /// Returns a new instance of `UIColor` in the **Display P3**
     /// color space, with random values for its color coordinates (red, green, blue), but with its opacity
     /// (alpha) set to the argument passed in (whose default value is 1), and using a particular random
     /// number generator.
@@ -178,7 +178,7 @@ extension ColorType {
         return ColorType(displayP3Red: r, green: g, blue: b, alpha: a)
     }
 
-    /// Returns a new instance of `UIColor` (on iOS) or of `NSColor` (on macOS) in the **Display P3**
+    /// Returns a new instance of `UIColor` in the **Display P3**
     /// color space, with random values for all of its color coordinates (red, green, blue, alpha), using
     /// a particular random number generator.
     ///
@@ -196,7 +196,7 @@ extension ColorType {
 
 extension ColorType {
 
-    /// Returns a new instance of `UIColor` (on iOS) or of `NSColor` (on macOS) in the **RGB** color space,
+    /// Returns a new instance of `UIColor` in the **RGB** color space,
     /// with random values for its color coordinates (red, green, blue), but with its opacity (alpha) set to
     /// the argument passed in (whose default value is 1).
     ///
@@ -205,7 +205,7 @@ extension ColorType {
         return ColorType.randomRGB(alpha: alpha, using: &rng)
     }
 
-    /// Returns a new instance of `UIColor` (on iOS) or of `NSColor` (on macOS) in the **RGB** color space,
+    /// Returns a new instance of `UIColor` in the **RGB** color space,
     /// with random values for all of its color coordinates (red, green, blue, alpha).
     ///
     public static func randomRGBA() -> ColorType {
@@ -213,7 +213,7 @@ extension ColorType {
         return ColorType.randomRGBA(using: &rng)
     }
 
-    /// Returns a new instance of `UIColor` (on iOS) or of `NSColor` (on macOS) in the **RGB** color space,
+    /// Returns a new instance of `UIColor` in the **RGB** color space,
     /// with random values for its color coordinates (red, green, blue), but with its opacity (alpha)
     /// set to the argument passed in (whose default value is 1), and using a particular random number
     /// generator.
@@ -229,7 +229,7 @@ extension ColorType {
         return ColorType(red: r, green: g, blue: b, alpha: a)
     }
 
-    /// Returns a new instance of `UIColor` (on iOS) or of `NSColor` (on macOS) in the **RGB** color space,
+    /// Returns a new instance of `UIColor` in the **RGB** color space,
     /// with random values for all of its color coordinates (red, green, blue, alpha), using a particular
     /// random number generator.
     ///
@@ -276,7 +276,7 @@ extension ColorType {
 
 extension ColorType {
 
-    /// Returns a new instance of `UIColor` (on iOS) or of `NSColor` (on macOS) in the **HSB** color space,
+    /// Returns a new instance of `UIColor` in the **HSB** color space,
     /// with random values for its color coordinates (hue, saturation, brightness), but with its opacity
     /// (alpha) set to the argument passed in (whose default value is 1).
     ///
@@ -285,7 +285,7 @@ extension ColorType {
         return ColorType.randomHSB(alpha: alpha, using: &rng)
     }
 
-    /// Returns a new instance of `UIColor` (on iOS) or of `NSColor` (on macOS) in the **HSB** color space,
+    /// Returns a new instance of `UIColor` in the **HSB** color space,
     /// with random values for all of its color coordinates (hue, saturation, brightness, alpha).
     ///
     public static func randomHSBA() -> ColorType {
@@ -293,7 +293,7 @@ extension ColorType {
         return ColorType.randomHSBA(using: &rng)
     }
 
-    /// Returns a new instance of `UIColor` (on iOS) or of `NSColor` (on macOS) in the **HSB** color space,
+    /// Returns a new instance of `UIColor` in the **HSB** color space,
     /// with random values for its color coordinates (hue, saturation, brightness), but with its opacity
     /// (alpha) set to the argument passed in (whose default value is 1), and using a particular random
     /// number generator.
@@ -309,7 +309,7 @@ extension ColorType {
         return ColorType(hue: h, saturation: s, brightness: b, alpha: a)
     }
 
-    /// Returns a new instance of `UIColor` (on iOS) or of `NSColor` (on macOS) in the **HSB** color space,
+    /// Returns a new instance of `UIColor` in the **HSB** color space,
     /// with random values for all of its color coordinates (hue, saturation, brightness, alpha), using a
     /// particular random number generator.
     ///
@@ -356,7 +356,7 @@ extension ColorType {
 
 extension ColorType {
 
-    /// Returns a new instance of `UIColor` (on iOS) or of `NSColor` (on macOS) in the **Grayscale** color
+    /// Returns a new instance of `UIColor` in the **Grayscale** color
     /// space, with random values for its white color coordinate, but with its opacity (alpha) set to the
     /// argument passed in (whose default value is 1).
     ///
@@ -365,7 +365,7 @@ extension ColorType {
         return ColorType.randomWhite(alpha: alpha, using: &rng)
     }
 
-    /// Returns a new instance of `UIColor` (on iOS) or of `NSColor` (on macOS) in the **Grayscale** color
+    /// Returns a new instance of `UIColor` in the **Grayscale** color
     /// space, with random values for both of its color coordinates (white, alpha).
     ///
     public static func randomWhiteAndAlpha() -> ColorType {
@@ -373,7 +373,7 @@ extension ColorType {
         return ColorType.randomWhiteAndAlpha(using: &rng)
     }
 
-    /// Returns a new instance of `UIColor` (on iOS) or of `NSColor` (on macOS) in the **Grayscale** color
+    /// Returns a new instance of `UIColor` in the **Grayscale** color
     /// space, with random values for its white color coordinate, but with its opacity (alpha) set to the
     /// argument passed in (whose default value is 1), and using a particular random number generator.
     ///
@@ -386,7 +386,7 @@ extension ColorType {
         return ColorType(white: w, alpha: a)
     }
 
-    /// Returns a new instance of `UIColor` (on iOS) or of `NSColor` (on macOS) in the **Grayscale** color
+    /// Returns a new instance of `UIColor` in the **Grayscale** color
     /// space, with random values for both of its color coordinates (white, alpha), using a particular random
     /// number generator.
     ///
