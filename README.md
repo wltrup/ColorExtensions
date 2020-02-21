@@ -2,7 +2,7 @@
 
 ## What
 
-**ColorExtensions** is a Swift Package Manager package for iOS, iPadOS, and watchOS providing a variety of useful extensions to UIColor. In fact, here's a complete list of all the functions and extra types that are made available by this package:
+**ColorExtensions** is a Swift Package Manager package for iOS 10.0 and above, iPadOS 10.0 and above, and watchOS 5.0 and above providing a variety of useful extensions to UIColor. In fact, here's a complete list of all the functions and extra types that are made available by this package:
 ```swift
 extension UIColor {
 
