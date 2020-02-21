@@ -11,28 +11,22 @@ extension UIColor {
     }
 
     public struct RGBAComponents: Equatable {
-
         public let red: CGFloat
         public let green: CGFloat
         public let blue: CGFloat
         public let alpha: CGFloat
-
     }
 
     public struct HSBAComponents: Equatable {
-
         public let hue: CGFloat
         public let saturation: CGFloat
         public let brightness: CGFloat
         public let alpha: CGFloat
-
     }
 
     public struct WhiteAlphaComponents: Equatable {
-
         public let white: CGFloat
         public let alpha: CGFloat
-
     }
 
     // MARK: - HEX
