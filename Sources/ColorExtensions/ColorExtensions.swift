@@ -1,12 +1,9 @@
 import Foundation
 
-#if os(macOS)
-    import AppKit
-    public typealias ColorType = NSColor
-#else
-    import UIKit
-    public typealias ColorType = UIColor
-#endif
+// Todo: Add support for AppKit's NSColor on macOS
+
+import UIKit
+public typealias ColorType = UIColor
 
 // MARK: -
 
