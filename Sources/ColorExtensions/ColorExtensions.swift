@@ -28,6 +28,141 @@ extension ColorType {
 
 }
 
+// MARK: - HEX
+
+extension ColorType {
+
+    /// Creates an instance of `UIColor` (on iOS) or of `NSColor` (on macOS) in the **RGB** color space,
+    /// given its hexadecimal representation (which **does** includes alpha).
+    ///
+    public convenience init(hexValueRGBA: UInt32) {
+        let hexInt = Int(hexValueRGBA)
+        let r = CGFloat((hexInt & 0xFF000000) >> 24) / 255
+        let g = CGFloat((hexInt & 0x00FF0000) >> 16) / 255
+        let b = CGFloat((hexInt & 0x0000FF00) >>  8) / 255
+        let a = CGFloat((hexInt & 0x000000FF) >>  0) / 255
+        self.init(red: r, green: g, blue: b, alpha: a)
+    }
+
+    /// Creates an instance of `UIColor` (on iOS) or of `NSColor` (on macOS) in the **RGB** color space,
+    /// given its hexadecimal representation (which does **not** include alpha), if valid.
+    ///
+    public convenience init?(hexValueRGB: UInt32, alpha: CGFloat = 1.0) {
+        guard hexValueRGB <= 0xFFFFFF else { return nil }
+        let hexInt = Int(hexValueRGB)
+        let r = CGFloat((hexInt & 0xFF0000) >> 16) / 255
+        let g = CGFloat((hexInt & 0x00FF00) >>  8) / 255
+        let b = CGFloat((hexInt & 0x0000FF) >>  0) / 255
+        let a = min(max(0, alpha), 1)
+        self.init(red: r, green: g, blue: b, alpha: a)
+    }
+
+    /// Creates an instance of `UIColor` (on iOS) or of `NSColor` (on macOS) in the **RGB** color space,
+    /// given its hexadecimal string representation (which **does** includes alpha).
+    ///
+    public convenience init?(hexStringRGBA: String) {
+        var hexInt32: UInt32 = 0
+        let scanner = Scanner(string: hexStringRGBA)
+        scanner.charactersToBeSkipped = CharacterSet(charactersIn: "#")
+        let success = scanner.scanHexInt32(&hexInt32)
+        guard success else { return nil }
+        self.init(hexValueRGBA: hexInt32)
+    }
+
+    /// Creates an instance of `UIColor` (on iOS) or of `NSColor` (on macOS) in the **RGB** color space,
+    /// given its hexadecimal string representation (which does **not** include alpha), if valid.
+    ///
+    public convenience init?(hexStringRGB: String, alpha: CGFloat = 1.0) {
+        var hexInt32: UInt32 = 0
+        let scanner = Scanner(string: hexStringRGB)
+        scanner.charactersToBeSkipped = CharacterSet(charactersIn: "#")
+        let success = scanner.scanHexInt32(&hexInt32)
+        guard success else { return nil }
+        self.init(hexValueRGB: hexInt32, alpha: alpha)
+    }
+
+    /// Returns the hexadecimal representation of `self`, as a string, **without including** the alpha value,
+    /// if `self` is represented internally in a **RGB**-compatible color scheme, or the error value
+    /// `ColorSpaceError.incompatibleColorSpace` if not.
+    ///
+    public func hexStringRGB() -> Result<String, ColorSpaceError> {
+        rgbaComponents()
+            .map { comps in
+                [comps.red, comps.green, comps.blue]
+                    .map { Int(255 * $0) }
+                    .map { String(format:"%02X", $0) }
+                    .reduce("#", +)
+            }
+    }
+
+    /// Returns the hexadecimal representation of `self`, as a string, **including** the alpha value,
+    /// if `self` is represented internally in a **RGB**-compatible color scheme, or the error value
+    /// `ColorSpaceError.incompatibleColorSpace` if not.
+    ///
+    public func hexStringRGBA() -> Result<String, ColorSpaceError> {
+        rgbaComponents()
+            .map { comps in
+                [comps.red, comps.green, comps.blue, comps.alpha]
+                    .map { Int(255 * $0) }
+                    .map { String(format:"%02X", $0) }
+                    .reduce("#", +)
+            }
+    }
+
+}
+
+// MARK: - Display P3
+
+@available(iOS 10.0, *)
+extension ColorType {
+
+    /// Returns a new instance of `UIColor` (on iOS) or of `NSColor` (on macOS) in the **Display P3**
+    /// color space, with random values for its color coordinates (red, green, blue), but with its opacity
+    /// (alpha) set to the argument passed in (whose default value is 1).
+    ///
+    public static func randomDisplayP3(alpha: CGFloat = 1) -> ColorType {
+        var rng = SystemRandomNumberGenerator()
+        return ColorType.randomDisplayP3(alpha: alpha, using: &rng)
+    }
+
+    /// Returns a new instance of `UIColor` (on iOS) or of `NSColor` (on macOS) in the **Display P3**
+    /// color space, with random values for all of its color coordinates (red, green, blue, alpha).
+    ///
+    public static func randomDisplayP3A() -> ColorType {
+        var rng = SystemRandomNumberGenerator()
+        return ColorType.randomDisplayP3A(using: &rng)
+    }
+
+    /// Returns a new instance of `UIColor` (on iOS) or of `NSColor` (on macOS) in the **Display P3**
+    /// color space, with random values for its color coordinates (red, green, blue), but with its opacity
+    /// (alpha) set to the argument passed in (whose default value is 1), and using a particular random
+    /// number generator.
+    ///
+    public static func randomDisplayP3 <RNG: RandomNumberGenerator> (
+        alpha: CGFloat = 1,
+        using rng: inout RNG
+    ) -> ColorType {
+        let r = CGFloat.random01(using: &rng)
+        let g = CGFloat.random01(using: &rng)
+        let b = CGFloat.random01(using: &rng)
+        let a = min(max(0, alpha), 1)
+        return ColorType(displayP3Red: r, green: g, blue: b, alpha: a)
+    }
+
+    /// Returns a new instance of `UIColor` (on iOS) or of `NSColor` (on macOS) in the **Display P3**
+    /// color space, with random values for all of its color coordinates (red, green, blue, alpha), using
+    /// a particular random number generator.
+    ///
+    public static func randomDisplayP3A <RNG: RandomNumberGenerator> (using rng: inout RNG) -> ColorType {
+        let r = CGFloat.random01(using: &rng)
+        let g = CGFloat.random01(using: &rng)
+        let b = CGFloat.random01(using: &rng)
+        let a = CGFloat.random01(using: &rng)
+        return ColorType(displayP3Red: r, green: g, blue: b, alpha: a)
+    }
+
+}
+
 // MARK: - RGBA
 
 extension ColorType {
@@ -75,34 +210,6 @@ extension ColorType {
         let b = CGFloat.random01(using: &rng)
         let a = CGFloat.random01(using: &rng)
         return ColorType(red: r, green: g, blue: b, alpha: a)
-    }
-
-    /// Returns the hexadecimal representation of `self`, as a string, without including the alpha value,
-    /// if `self` is represented internally in a **RGB**-compatible color scheme, or the error value
-    /// `ColorSpaceError.incompatibleColorSpace` if not.
-    ///
-    public func hexStringRGB() -> Result<String, ColorSpaceError> {
-        rgbaComponents()
-            .map { comps in
-                [comps.red, comps.green, comps.blue]
-                    .map { Int(255 * $0) }
-                    .map { String(format:"%02X", $0) }
-                    .reduce("", +)
-            }
-    }
-
-    /// Returns the hexadecimal representation of `self`, as a string, including the alpha value,
-    /// if `self` is represented internally in a **RGB**-compatible color scheme, or the error value
-    /// `ColorSpaceError.incompatibleColorSpace` if not.
-    ///
-    public func hexStringRGBA() -> Result<String, ColorSpaceError> {
-        rgbaComponents()
-            .map { comps in
-                [comps.red, comps.green, comps.blue, comps.alpha]
-                    .map { Int(255 * $0) }
-                    .map { String(format:"%02X", $0) }
-                    .reduce("", +)
-            }
     }
 
     public struct RGBAComponents {
