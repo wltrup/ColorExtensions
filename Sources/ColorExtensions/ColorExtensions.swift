@@ -23,7 +23,7 @@ extension CGFloat {
 extension ColorType {
 
     public enum ColorSpaceError: Error {
-        case invalidColorSpace
+        case incompatibleColorSpace
     }
 
 }
@@ -32,11 +32,28 @@ extension ColorType {
 
 extension ColorType {
 
+    /// Returns a new instance of `UIColor` (on iOS) or of `NSColor` (on macOS) in the **RGB** color space,
+    /// with random values for its color coordinates (red, green, blue), but with its opacity (alpha) set to
+    /// the argument passed in (whose default value is 1).
+    ///
     public static func randomRGB(alpha: CGFloat = 1) -> ColorType {
         var rng = SystemRandomNumberGenerator()
         return ColorType.randomRGB(alpha: alpha, using: &rng)
     }
 
+    /// Returns a new instance of `UIColor` (on iOS) or of `NSColor` (on macOS) in the **RGB** color space,
+    /// with random values for all of its color coordinates (red, green, blue, alpha).
+    ///
+    public static func randomRGBA() -> ColorType {
+        var rng = SystemRandomNumberGenerator()
+        return ColorType.randomRGBA(using: &rng)
+    }
+
+    /// Returns a new instance of `UIColor` (on iOS) or of `NSColor` (on macOS) in the **RGB** color space,
+    /// with random values for its color coordinates (red, green, blue), but with its opacity (alpha)
+    /// set to the argument passed in (whose default value is 1), and using a particular random number
+    /// generator.
+    ///
     public static func randomRGB <RNG: RandomNumberGenerator> (
         alpha: CGFloat = 1,
         using rng: inout RNG
@@ -48,17 +65,44 @@ extension ColorType {
         return ColorType(red: r, green: g, blue: b, alpha: a)
     }
 
-    public static func randomRGBA() -> ColorType {
-        var rng = SystemRandomNumberGenerator()
-        return ColorType.randomRGBA(using: &rng)
-    }
-
+    /// Returns a new instance of `UIColor` (on iOS) or of `NSColor` (on macOS) in the **RGB** color space,
+    /// with random values for all of its color coordinates (red, green, blue, alpha), using a particular
+    /// random number generator.
+    ///
     public static func randomRGBA <RNG: RandomNumberGenerator> (using rng: inout RNG) -> ColorType {
         let r = CGFloat.random01(using: &rng)
         let g = CGFloat.random01(using: &rng)
         let b = CGFloat.random01(using: &rng)
         let a = CGFloat.random01(using: &rng)
         return ColorType(red: r, green: g, blue: b, alpha: a)
+    }
+
+    /// Returns the hexadecimal representation of `self`, as a string, without including the alpha value,
+    /// if `self` is represented internally in a **RGB**-compatible color scheme, or the error value
+    /// `ColorSpaceError.incompatibleColorSpace` if not.
+    ///
+    public func hexStringRGB() -> Result<String, ColorSpaceError> {
+        rgbaComponents()
+            .map { comps in
+                [comps.red, comps.green, comps.blue]
+                    .map { Int(255 * $0) }
+                    .map { String(format:"%02X", $0) }
+                    .reduce("", +)
+            }
+    }
+
+    /// Returns the hexadecimal representation of `self`, as a string, including the alpha value,
+    /// if `self` is represented internally in a **RGB**-compatible color scheme, or the error value
+    /// `ColorSpaceError.incompatibleColorSpace` if not.
+    ///
+    public func hexStringRGBA() -> Result<String, ColorSpaceError> {
+        rgbaComponents()
+            .map { comps in
+                [comps.red, comps.green, comps.blue, comps.alpha]
+                    .map { Int(255 * $0) }
+                    .map { String(format:"%02X", $0) }
+                    .reduce("", +)
+            }
     }
 
     public struct RGBAComponents {
@@ -68,13 +112,17 @@ extension ColorType {
         public let alpha: CGFloat
     }
 
-    public func rgbaComponents() -> RGBAComponents {
+    /// Returns the RGBA components of `self`, if `self` is represented internally in a **RGB**-compatible
+    /// color scheme, or the error value `ColorSpaceError.incompatibleColorSpace` if not.
+    ///
+    public func rgbaComponents() -> Result<RGBAComponents, ColorSpaceError> {
         var r: CGFloat = 0
         var g: CGFloat = 0
         var b: CGFloat = 0
         var a: CGFloat = 0
-        getRed(&r, green: &g, blue: &b, alpha: &a)
-        return RGBAComponents(red: r, green: g, blue: b, alpha: a)
+        let success = getRed(&r, green: &g, blue: &b, alpha: &a)
+        guard success else { return .failure(.incompatibleColorSpace) }
+        return .success(RGBAComponents(red: r, green: g, blue: b, alpha: a))
     }
 
 }
@@ -83,11 +131,28 @@ extension ColorType {
 
 extension ColorType {
 
+    /// Returns a new instance of `UIColor` (on iOS) or of `NSColor` (on macOS) in the **HSB** color space,
+    /// with random values for its color coordinates (hue, saturation, brightness), but with its opacity
+    /// (alpha) set to the argument passed in (whose default value is 1).
+    ///
     public static func randomHSB(alpha: CGFloat = 1) -> ColorType {
         var rng = SystemRandomNumberGenerator()
         return ColorType.randomHSB(alpha: alpha, using: &rng)
     }
 
+    /// Returns a new instance of `UIColor` (on iOS) or of `NSColor` (on macOS) in the **HSB** color space,
+    /// with random values for all of its color coordinates (hue, saturation, brightness, alpha).
+    ///
+    public static func randomHSBA() -> ColorType {
+        var rng = SystemRandomNumberGenerator()
+        return ColorType.randomHSBA(using: &rng)
+    }
+
+    /// Returns a new instance of `UIColor` (on iOS) or of `NSColor` (on macOS) in the **HSB** color space,
+    /// with random values for its color coordinates (hue, saturation, brightness), but with its opacity
+    /// (alpha) set to the argument passed in (whose default value is 1), and using a particular random
+    /// number generator.
+    ///
     public static func randomHSB <RNG: RandomNumberGenerator> (
         alpha: CGFloat = 1,
         using rng: inout RNG
@@ -99,11 +164,10 @@ extension ColorType {
         return ColorType(hue: h, saturation: s, brightness: b, alpha: a)
     }
 
-    public static func randomHSBA() -> ColorType {
-        var rng = SystemRandomNumberGenerator()
-        return ColorType.randomHSBA(using: &rng)
-    }
-
+    /// Returns a new instance of `UIColor` (on iOS) or of `NSColor` (on macOS) in the **HSB** color space,
+    /// with random values for all of its color coordinates (hue, saturation, brightness, alpha), using a
+    /// particular random number generator.
+    ///
     public static func randomHSBA <RNG: RandomNumberGenerator> (using rng: inout RNG) -> ColorType {
         let h = CGFloat.random01(using: &rng)
         let s = CGFloat.random01(using: &rng)
@@ -119,13 +183,17 @@ extension ColorType {
         public let alpha: CGFloat
     }
 
-    public func hsbaComponents() -> HSBAComponents {
+    /// Returns the HSBA components of `self`, if `self` is represented internally in a **HSB**-compatible
+    /// color scheme, or the error value `ColorSpaceError.incompatibleColorSpace` if not.
+    ///
+    public func hsbaComponents() -> Result<HSBAComponents, ColorSpaceError> {
         var h: CGFloat = 0
         var s: CGFloat = 0
         var b: CGFloat = 0
         var a: CGFloat = 0
-        getHue(&h, saturation: &s, brightness: &b, alpha: &a)
-        return HSBAComponents(hue: h, saturation: s, brightness: b, alpha: a)
+        let success = getHue(&h, saturation: &s, brightness: &b, alpha: &a)
+        guard success else { return .failure(.incompatibleColorSpace) }
+        return .success(HSBAComponents(hue: h, saturation: s, brightness: b, alpha: a))
     }
 
 }
@@ -134,11 +202,27 @@ extension ColorType {
 
 extension ColorType {
 
+    /// Returns a new instance of `UIColor` (on iOS) or of `NSColor` (on macOS) in the **Grayscale** color
+    /// space, with random values for its white color coordinate, but with its opacity (alpha) set to the
+    /// argument passed in (whose default value is 1).
+    ///
     public static func randomWhite(alpha: CGFloat = 1) -> ColorType {
         var rng = SystemRandomNumberGenerator()
         return ColorType.randomWhite(alpha: alpha, using: &rng)
     }
 
+    /// Returns a new instance of `UIColor` (on iOS) or of `NSColor` (on macOS) in the **Grayscale** color
+    /// space, with random values for both of its color coordinates (white, alpha).
+    ///
+    public static func randomWhiteAndAlpha() -> ColorType {
+        var rng = SystemRandomNumberGenerator()
+        return ColorType.randomWhiteAndAlpha(using: &rng)
+    }
+
+    /// Returns a new instance of `UIColor` (on iOS) or of `NSColor` (on macOS) in the **Grayscale** color
+    /// space, with random values for its white color coordinate, but with its opacity (alpha) set to the
+    /// argument passed in (whose default value is 1), and using a particular random number generator.
+    ///
     public static func randomWhite <RNG: RandomNumberGenerator> (
         alpha: CGFloat = 1,
         using rng: inout RNG
@@ -148,11 +232,10 @@ extension ColorType {
         return ColorType(white: w, alpha: a)
     }
 
-    public static func randomWhiteAndAlpha() -> ColorType {
-        var rng = SystemRandomNumberGenerator()
-        return ColorType.randomWhiteAndAlpha(using: &rng)
-    }
-
+    /// Returns a new instance of `UIColor` (on iOS) or of `NSColor` (on macOS) in the **Grayscale** color
+    /// space, with random values for both of its color coordinates (white, alpha), using a particular random
+    /// number generator.
+    ///
     public static func randomWhiteAndAlpha <RNG: RandomNumberGenerator> (using rng: inout RNG) -> ColorType {
         let w = CGFloat.random01(using: &rng)
         let a = CGFloat.random01(using: &rng)
@@ -164,33 +247,16 @@ extension ColorType {
         public let alpha: CGFloat
     }
 
-    public func whiteAlphaComponents() -> WhiteAlphaComponents {
+    /// Returns the white and alpha components of `self`, if `self` is represented internally in a
+    /// **Grayscale**-compatible color scheme, or the error value `ColorSpaceError.incompatibleColorSpace`
+    /// if not.
+    ///
+    public func whiteAlphaComponents() -> Result<WhiteAlphaComponents, ColorSpaceError> {
         var w: CGFloat = 0
         var a: CGFloat = 0
-        getWhite(&w, alpha: &a)
-        return WhiteAlphaComponents(white: w, alpha: a)
-    }
-
-}
-
-// MARK: - HEX
-
-extension ColorType {
-
-    public func hexString() -> String {
-        let comps = rgbaComponents()
-        return [comps.red, comps.green, comps.blue]
-            .map { Int(255 * $0) }
-            .map { String(format:"%02X", $0) }
-            .reduce("", +)
-    }
-
-    public func hexStringWithAlpha() -> String {
-        let comps = rgbaComponents()
-        return [comps.red, comps.green, comps.blue, comps.alpha]
-            .map { Int(255 * $0) }
-            .map { String(format:"%02X", $0) }
-            .reduce("", +)
+        let success = getWhite(&w, alpha: &a)
+        guard success else { return .failure(.incompatibleColorSpace) }
+        return .success(WhiteAlphaComponents(white: w, alpha: a))
     }
 
 }
@@ -214,8 +280,7 @@ extension ColorType {
     ///   - green: the green component of `self`, in the range [0,1].
     ///   - blue:  the blue  component of `self`, in the range [0,1].
     ///
-    /// - Returns: an approximate value for the **luminance** of a color with the
-    ///            given RGB values.
+    /// - Returns: an approximate value for the **luminance** of a color with the given RGB values.
     ///
     public static func quadraticLuma(red: CGFloat, green: CGFloat, blue: CGFloat) -> CGFloat {
         let r = min(max(0, red), 1)
@@ -239,9 +304,11 @@ extension ColorType {
     ///
     /// - Returns: an approximate value for the **luminance** of `self`.
     ///
-    public func quadraticLuma() -> CGFloat {
-        let comps = rgbaComponents()
-        return ColorType.quadraticLuma(red: comps.red, green: comps.green, blue: comps.blue)
+    public func quadraticLuma() -> Result<CGFloat, ColorSpaceError> {
+        rgbaComponents()
+            .map { comps in
+                ColorType.quadraticLuma(red: comps.red, green: comps.green, blue: comps.blue)
+            }
     }
 
 }
@@ -277,17 +344,19 @@ extension ColorType {
         continuous: Bool = true,
         threshold: CGFloat = 0.2,
         sameAlpha: Bool = false
-    ) -> ColorType {
-        let comps = rgbaComponents()
-        let luma = ColorType.quadraticLuma(red: comps.red, green: comps.green, blue: comps.blue)
-        let a: CGFloat = (sameAlpha ? comps.alpha : 1)
-        if continuous {
-            return ColorType(white: 1 - luma, alpha: a)
-        } else {
-            return luma > threshold
-                ? ColorType.black.withAlphaComponent(a)
-                : ColorType.white.withAlphaComponent(a)
-        }
+    ) -> Result<ColorType, ColorSpaceError> {
+        rgbaComponents()
+            .map { comps in
+                let luma = ColorType.quadraticLuma(red: comps.red, green: comps.green, blue: comps.blue)
+                let a: CGFloat = (sameAlpha ? comps.alpha : 1)
+                if continuous {
+                    return ColorType(white: 1 - luma, alpha: a)
+                } else {
+                    return luma > threshold
+                        ? ColorType.black.withAlphaComponent(a)
+                        : ColorType.white.withAlphaComponent(a)
+                }
+            }
     }
 
 }
