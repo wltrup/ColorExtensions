@@ -217,15 +217,13 @@ extension UIColor {
 
     /// Returns an approximate value for the luminance of an RGB color.
     ///
-    /// See:
-    /// http://gamedev.stackexchange.com/questions/38536/given-a-rgb-color-x-how-to-find-the-most-contrasting-color-y
+    /// See [this entry](http://gamedev.stackexchange.com/questions/38536/given-a-rgb-color-x-how-to-find-the-most-contrasting-color-y) in gamedev.stackexchange
     ///
     public static func quadraticLuma(red: CGFloat, green: CGFloat, blue: CGFloat) -> CGFloat
 
     /// Returns an approximate value for the luminance of an RGB color.
     ///
-    /// See:
-    /// http://gamedev.stackexchange.com/questions/38536/given-a-rgb-color-x-how-to-find-the-most-contrasting-color-y
+    /// See [this entry](http://gamedev.stackexchange.com/questions/38536/given-a-rgb-color-x-how-to-find-the-most-contrasting-color-y) in gamedev.stackexchange
     ///
     public func quadraticLuma() -> Result<CGFloat, ColorSpaceError>
 
@@ -233,8 +231,7 @@ extension UIColor {
 
     /// Returns a color that contrasts well with self.
     ///
-    /// See:
-    /// http://gamedev.stackexchange.com/questions/38536/given-a-rgb-color-x-how-to-find-the-most-contrasting-color-y
+    /// See [this entry](http://gamedev.stackexchange.com/questions/38536/given-a-rgb-color-x-how-to-find-the-most-contrasting-color-y) in gamedev.stackexchange
     ///
     /// - Parameters:
     ///
