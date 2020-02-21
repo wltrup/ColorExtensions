@@ -110,7 +110,6 @@ extension ColorType {
 
 // MARK: - Display P3
 
-@available(iOS 10.0, *)
 extension ColorType {
 
     /// Returns a new instance of `UIColor` (on iOS) or of `NSColor` (on macOS) in the **Display P3**
