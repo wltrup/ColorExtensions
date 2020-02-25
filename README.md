@@ -1,8 +1,13 @@
 # ColorExtensions
+![](https://img.shields.io/badge/platforms-iOS%2010%20%7C%20tvOS%2010%20%7C%20watchOS%205-red)
+[![Xcode](https://img.shields.io/badge/Xcode-11-blueviolet.svg)](https://developer.apple.com/xcode)
+[![Swift](https://img.shields.io/badge/Swift-5.1-orange.svg)](https://swift.org)
+![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/wltrup/ColorExtensions)
+![GitHub](https://img.shields.io/github/license/wltrup/ColorExtensions)
 
 ## What
 
-**ColorExtensions** is a Swift Package Manager package for iOS 10.0 and above, iPadOS 10.0 and above, and watchOS 5.0 and above providing a variety of useful extensions to UIColor, with nearly 90% test coverage. In fact, here's a complete list of all the functions and extra types that are made available by this package:
+**ColorExtensions** is a Swift Package Manager package for iOS/tvOS (10.0 and above) and watchOS (5.0 and above) providing a variety of useful extensions to `UIColor`, with nearly 90% test coverage. In fact, here's a complete list of all the functions and extra types that are made available by this package:
 ```swift
 extension UIColor {
 
